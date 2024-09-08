@@ -1,0 +1,19 @@
+Id pacchetti prima pagina (0):
+- da 0x50 a 0x56 per battery0;
+- da 0x57 a 0x5D per battery1.
+
+Id pacchetti seconda pagina (1):
+- da 0x151 a 0x154 e da 0x161 a 0x164 per battery0;
+- da 0x171 a 0x174 e da 0x181 a 0x184 per battery1;
+- 0x521 discharge/charge_rate;
+- 0x522 shunt_voltage;
+- 0x526 output_power.
+
+Id pacchetti terza pagina (2):
+- 0x100 e 0x102 MotoreSX;
+- 0x101 e 0x103 MotoreDX.
+
+Id pacchetti quarta pagina (3):
+- 0xb con i flag enable/disable;
+- 0x20 con le correnti;
+- 0x523 con la tensione.

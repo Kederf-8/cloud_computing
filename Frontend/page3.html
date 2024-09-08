@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Futuro Solare</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <img src="img/iconaFS.png" />
+    </header>
+
+    <div class="sidebar">
+      <div class="menu">
+        <a href="page0.html"><img src="img/icon1.png" alt="Icona 1" /></a>
+        <a href="page1.html"><img src="img/icon2.png" alt="Icona 2" /></a>
+        <a href="page2.html"><img src="img/icon3.png" alt="Icona 3" /></a>
+        <a href="page3.html" class="activeImage"><img src="img/icon4.png" alt="Icona 4" /></a>
+        <img src="img/iconaLT.png" />
+      </div>
+    </div>
+
+    <div class="content">
+      <table class="wide-table-inverter">
+        <tr>
+          <th class="tableTitle-inverter" colspan="1">MPPT 1</th>
+          <th class="tableTitle-inverter" colspan="1">MPPT 2</th>
+          <th class="tableTitle-inverter" colspan="1">MPPT 3</th>
+        </tr>
+        <tr class="long_line">
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="cellItem-inverter-disabled" id="STATUSmppt1">DISABLED</td>
+          <td class="cellItem-inverter-disabled" id="STATUSmppt2">
+            DISABLED
+          </td>
+          <td class="cellItem-inverter-disabled" id="STATUSmppt3">DISABLED</td>
+        </tr>
+        <tr>
+          <td class="cellLabel-inverter">CURRENT (A)</td>
+          <td class="cellLabel-inverter">CURRENT (A)</td>
+          <td class="cellLabel-inverter">CURRENT (A)</td>
+        </tr>
+        <tr>
+          <td class="cellItem-inverter" id="CAmppt1">0</td>
+          <td class="cellItem-inverter" id="CAmppt2">0</td>
+          <td class="cellItem-inverter" id="CAmppt3">0</td>
+        </tr>
+        <tr>
+          <td class="cellLabel-inverter">POWER (W)</td>
+          <td class="cellLabel-inverter">POWER (W)</td>
+          <td class="cellLabel-inverter">POWER (W)</td>
+        </tr>
+        <tr>
+          <td class="cellItem-inverter" id="PWmppt1">0</td>
+          <td class="cellItem-inverter" id="PWmppt2">0</td>
+          <td class="cellItem-inverter" id="PWmppt3">0</td>
+        </tr>
+        <tr>
+          <td class="cellLabel-inverter">POWER TOT (W)</td>
+          <td class="cellLabel-inverter">VOLTAGE (V)</td>
+          <td class="cellLabel-inverter">CURRENT TOT (A)</td>
+        </tr>
+        <tr>
+          <td class="cellItem-inverter-powertot" id="PWTOT">0</td>
+          <td class="cellItem-inverter-powertot" id="VOLTAGE">0</td>
+          <td class="cellItem-inverter-powertot" id="CTOT">0</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script type="text/javascript" src="page3.js"></script>
+</body>
+
+</html>
