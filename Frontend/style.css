@@ -1,0 +1,333 @@
+@font-face {
+  font-family: SegoeUI;
+  src: local("Segoe UI Semilight"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff2)
+      format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff)
+      format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.ttf)
+      format("truetype");
+  font-weight: 200;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI Semilight", sans-serif;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+header {
+  background-color: #292929;
+  color: white;
+  padding: 20px;
+  text-align: left;
+  width: 100%;
+}
+
+h1 {
+  margin: 0;
+}
+
+.sidebar {
+  width: 130px;
+  height: 100vh;
+  background-color: #292929;
+  float: left;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  justify-items: center;
+}
+
+.menu {
+  padding: 10px;
+  width: 100px;
+  text-align: center;
+}
+
+.menu a {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  border: 5px solid #292929;
+}
+
+.menu .activeImage {
+  border-radius: 50%;
+  padding: 10px;
+  border: 5px solid #ea6b31;
+}
+
+.content {
+  flex-basis: 80%;
+  flex-grow: 1;
+  padding: 20px;
+}
+
+table.wide-table {
+  border-collapse: separate;
+  border-spacing: 20px 10px;
+  margin-bottom: 50px;
+  margin-top: 80px;
+}
+
+table.wide-table-voltage {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 40px 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  table-layout: fixed;
+}
+
+table.wide-table-voltage-general {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 40px 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+table.wide-table-engine {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 5px 11px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  table-layout: fixed;
+}
+
+table.wide-table-engine-rpm {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 40px 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+table.wide-table-inverter {
+  border-collapse: separate;
+  border-spacing: 40px 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.cellItem {
+  background-color: #f0f0f0;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 60px;
+  text-align: center;
+  font-weight: none;
+  width: 270px !important;
+}
+
+.cellItem-problems {
+  background-color: #f0f0f0;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 60px;
+  text-align: center;
+  font-weight: none;
+  width: 100px !important;
+}
+
+.cellLabel {
+  height: 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.cellItem-voltage {
+  background-color: #f0f0f0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellItem-engine {
+  background-color: #f0f0f0;
+  padding: 12px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellItem-engine-rpm {
+  background-color: #f0f0f0;
+  padding: 12px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+  width: 150px !important;
+}
+
+.cellItem-engine-log {
+  background-color: #757575;
+  color: white;
+  height: 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellItem-inverter {
+  background-color: #f0f0f0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+  width: 350px;
+}
+
+.cellItem-inverter-enabled {
+  background-color: green;
+  color: white;
+  height: 100px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellItem-inverter-disabled {
+  background-color: red;
+  color: white;
+  height: 100px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellItem-inverter-powertot {
+  background-color: #292929;
+  color: white;
+  height: 100px;
+  border-radius: 10px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellItem-voltage-checkbox {
+  background-color: #fff;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 30px;
+  text-align: center;
+  font-weight: none;
+}
+
+.cellLabel-voltage {
+  height: 30px;
+  border-radius: 10px;
+  font-size: 17px;
+  text-align: center;
+}
+
+.cellLabel-engine {
+  height: 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.cellLabel-inverter {
+  height: 30px;
+  border-radius: 10px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.tableTitle {
+  font-size: 20px;
+  text-align: left;
+}
+
+.tableTitle-inverter {
+  font-size: 30px;
+  text-align: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: green;
+}
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+input:not(:checked) + .slider {
+  background-color: red;
+}
+
+.long_line {
+  background-color: #e3e3e3;
+  height: 1% !important;
+  padding: none !important;
+}

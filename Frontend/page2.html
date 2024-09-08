@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Futuro Solare</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <img src="img/iconaFS.png" />
+      </header>
+
+      <div class="sidebar">
+        <div class="menu">
+          <a href="page0.html"><img src="img/icon1.png" alt="Icona 1" /></a>
+          <a href="page1.html"><img src="img/icon2.png" alt="Icona 2" /></a>
+          <a href="page2.html" class="activeImage"
+            ><img src="img/icon3.png" alt="Icona 3"
+          /></a>
+          <a href="page3.html"><img src="img/icon4.png" alt="Icona 4" /></a>
+          <img src="img/iconaLT.png" />
+        </div>
+      </div>
+
+      <div class="content">
+        <table class="wide-table-engine">
+          <tr>
+            <th class="tableTitle" colspan="5">MOTORE DX</th>
+          </tr>
+          <tr class="long_line">
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <td class="cellLabel-engine">ENGINE TEMP</td>
+            <td class="cellLabel-engine">CONTROLLER TEMP</td>
+            <td class="cellLabel-engine">CONTROLLER VOLTAGE</td>
+            <td class="cellLabel-engine">CURRENT REQUESTED</td>
+            <td class="cellLabel-engine">CURRENT USED (AMP)</td>
+            <td class="cellLabel-engine">POWER USED (W)</td>
+          </tr>
+          <tr>
+            <td class="cellItem-engine" id="ETDX">0</td>
+            <td class="cellItem-engine" id="CTDX">0</td>
+            <td class="cellItem-engine" id="CVDX">0</td>
+            <td class="cellItem-engine" id="CRDX">0</td>
+            <td class="cellItem-engine" id="CUDX">0</td>
+            <td class="cellItem-engine" id="PWDX">0</td>
+          </tr>
+        </table>
+        <table class="wide-table-engine">
+          <tr>
+            <th class="tableTitle" colspan="5">MOTORE SX</th>
+          </tr>
+          <tr class="long_line">
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <td class="cellLabel-engine">ENGINE TEMP</td>
+            <td class="cellLabel-engine">CONTROLLER TEMP</td>
+            <td class="cellLabel-engine">CONTROLLER VOLTAGE</td>
+            <td class="cellLabel-engine">CURRENT REQUESTED</td>
+            <td class="cellLabel-engine">CURRENT USED (AMP)</td>
+            <td class="cellLabel-engine">POWER USED (W)</td>
+          </tr>
+          <tr>
+            <td class="cellItem-engine" id="ETSX">0</td>
+            <td class="cellItem-engine" id="CTSX">0</td>
+            <td class="cellItem-engine" id="CVSX">0</td>
+            <td class="cellItem-engine" id="CRSX">0</td>
+            <td class="cellItem-engine" id="CUSX">0</td>
+            <td class="cellItem-engine" id="PWSX">0</td>
+          </tr>
+        </table>
+        <table class="wide-table-engine-rpm">
+          <tr>
+            <th class="tableTitle" colspan="2">RPM</th>
+            <th class="tableTitle" colspan="1">SPEED</th>
+            <th class="tableTitle" colspan="1">LOG ERROR</th>
+          </tr>
+          <tr class="long_line">
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <td class="cellLabel-engine">RPM ENGINE DX</td>
+            <td class="cellLabel-engine">RPM ENGINE SX</td>
+            <td class="cellLabel-engine">SPEED (KM/H)</td>
+            <td class="cellItem-engine-log" id="LOG" rowspan="3"></td>
+          </tr>
+          <tr>
+            <td class="cellItem-engine-rpm" id="RPMDX">0</td>
+            <td class="cellItem-engine-rpm" id="RPMSX">0</td>
+            <td class="cellItem-engine" id="SPEED">0</td>
+          </tr>
+          <tr style="height: 70px"></tr>
+        </table>
+      </div>
+    </div>
+    <script type="text/javascript" src="page2.js"></script>
+  </body>
+</html>
