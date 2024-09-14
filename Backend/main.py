@@ -1,7 +1,5 @@
 import datetime
 import logging
-import threading
-import time
 from pathlib import Path
 
 from commons import (
@@ -17,6 +15,7 @@ from commons import (
 from engine_handler import update_engine_data
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from google.cloud import pubsub_v1, storage
 from mppt_handler import update_mppt_data
 from statistics_calculator import (
     calculate_temperature_statistics,
@@ -25,12 +24,11 @@ from statistics_calculator import (
 from temperature_handler import update_battery_temperatures
 from voltage_handler import update_battery_voltages
 
+# Configura Flask e CORS
 app = Flask(__name__)
-
-# Configura il middleware CORS per consentire le richieste da http://localhost:8000
 CORS(app, origins="http://localhost:8000")
 
-# Genera il file di log, con la data e l'ora attuale nel nome
+# Configura il logging
 now = datetime.datetime.now()
 formatted_date = now.strftime("%d-%m-%y-%H:%M")
 if not Path("logs").exists():
@@ -43,9 +41,17 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
-# Ignora i log delle chiamate GET
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
+
+# Configura Google Cloud Pub/Sub e Google Cloud Storage
+project_id = "solarcaroncloud"
+subscription_id = "canbus-topic-sub"
+bucket_name = "solarcar-bucket"
+
+subscriber = pubsub_v1.SubscriberClient()
+subscription_path = subscriber.subscription_path(project_id, subscription_id)
+storage_client = storage.Client()
 
 
 # Classe che simula il messaggio CAN
@@ -55,61 +61,75 @@ class SimulatedCANMessage:
         self.data = data
 
 
-# Simula la ricezione dei pacchetti tramite POST
-@app.route("/canbus", methods=["POST"])
-def receive_canbus_packet():
-    data = request.get_json()
-    packet = data.get("packet")
+# Funzione per salvare i dati su Google Cloud Storage
+def save_to_gcs(data, filename):
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(filename)
+    blob.upload_from_string(data)
+    logging.info(f"Dati salvati in {filename} su GCS.")
 
-    # Simula la ricezione del pacchetto CANbus
-    if packet:
-        print(f"Pacchetto ricevuto: {packet}")
+
+# Callback per elaborare i messaggi Pub/Sub
+def callback(message):
+    packet = message.data.decode("utf-8")
+    print(f"Pacchetto ricevuto: {packet}")
+    try:
+        packet_id_str, packet_data_str = packet.split("#")
+        packet_id = int(packet_id_str, 16)
+        packet_data = bytes.fromhex(packet_data_str)
+    except ValueError:
+        logging.error("Invalid message format: %s", packet)
+        message.nack()  # Non conferma il messaggio
+        return
+
+    # Crea un oggetto SimulatedCANMessage
+    simulated_message = SimulatedCANMessage(packet_id, packet_data)
+
+    date = datetime.datetime.now().strftime("%H:%M:%S")
+
+    # Processa il pacchetto in base al suo ID
+    if packet_id in FIRST_PAGE_IDS:
         try:
-            packet_id_str, packet_data_str = packet.split("#")
-            packet_id = int(packet_id_str, 16)
-            packet_data = bytes.fromhex(packet_data_str)
-        except ValueError:
-            logging.error("Invalid message format: %s", packet)
-            return jsonify({"status": "error", "message": "Invalid packet format"}), 400
+            update_battery_temperatures(simulated_message)
+            logging.info("Temperature data updated successfully (%s).", date)
+            logging.info("Temperatures: %s", battery_temperatures)
+            save_to_gcs(
+                str(battery_temperatures), f"temperatures_{formatted_date}.json"
+            )
+        except Exception as e:
+            logging.error("Error updating temperature data: %s", e)
+    elif packet_id in SECOND_PAGE_IDS:
+        try:
+            update_battery_voltages(simulated_message)
+            logging.info("Voltage data updated successfully (%s).", date)
+            logging.info("Voltages: %s", battery_voltages)
+            save_to_gcs(str(battery_voltages), f"voltages_{formatted_date}.json")
+        except Exception as e:
+            logging.error("Error updating voltage data: %s", e)
+    elif packet_id in THIRD_PAGE_IDS:
+        try:
+            update_engine_data(simulated_message)
+            logging.info("Engine data updated successfully (%s).", date)
+            save_to_gcs(str(engine_data), f"engine_{formatted_date}.json")
+        except Exception as e:
+            logging.error("Error updating engine data: %s", e)
+    elif packet_id in FOURTH_PAGE_IDS:
+        try:
+            update_mppt_data(simulated_message)
+            logging.info("MPPT data updated successfully (%s).", date)
+            save_to_gcs(str(mppt_data), f"mppt_{formatted_date}.json")
+        except Exception as e:
+            logging.error("Error updating MPPT data: %s", e)
 
-        # Crea un oggetto SimulatedCANMessage
-        simulated_message = SimulatedCANMessage(packet_id, packet_data)
-
-        date = datetime.datetime.now().strftime("%H:%M:%S")
-
-        # Processa il pacchetto in base al suo ID
-        if packet_id in FIRST_PAGE_IDS:
-            try:
-                update_battery_temperatures(simulated_message)
-                logging.info("Temperature data updated successfully (%s).", date)
-                logging.info("Temperatures: %s", battery_temperatures)
-            except Exception as e:
-                logging.error("Error updating temperature data: %s", e)
-        if packet_id in SECOND_PAGE_IDS:
-            try:
-                update_battery_voltages(simulated_message)
-                logging.info("Voltage data updated successfully (%s).", date)
-                logging.info("Voltages: %s", battery_voltages)
-            except Exception as e:
-                logging.error("Error updating voltage data: %s", e)
-        if packet_id in THIRD_PAGE_IDS:
-            try:
-                update_engine_data(simulated_message)
-                logging.info("Engine data updated successfully (%s).", date)
-            except Exception as e:
-                logging.error("Error updating engine data: %s", e)
-        if packet_id in FOURTH_PAGE_IDS:
-            try:
-                update_mppt_data(simulated_message)
-                logging.info("MPPT data updated successfully (%s).", date)
-            except Exception as e:
-                logging.error("Error updating MPPT data: %s", e)
-
-        return jsonify({"status": "success"}), 200
-    return jsonify({"status": "error", "message": "Invalid packet"}), 400
+    message.ack()  # Conferma il messaggio
 
 
-# Gli endpoint del frontend rimangono invariati
+# Avvia la sottoscrizione a Pub/Sub
+streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
+logging.info(f"Ascoltando i messaggi per {subscription_path}...")
+
+
+# Endpoint per recuperare i dati del frontend
 @app.route("/temperatures")
 def get_battery_temperatures():
     response_data = {}
@@ -139,4 +159,10 @@ def get_mppt_endpoint():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    # Esegui il backend e avvia l'ascolto dei messaggi
+    try:
+        app.run(host="0.0.0.0", port=5000)
+        streaming_pull_future.result()
+    except KeyboardInterrupt:
+        streaming_pull_future.cancel()
+        logging.info("Arresto del backend...")

@@ -1,0 +1,32 @@
+# cloudbuild.yaml
+
+steps:
+    # Step 1: Build the Backend
+    - name: "gcr.io/cloud-builders/docker"
+      args:
+          ["build", "-t", "gcr.io/solarcaroncloud/backend:latest", "./Backend"]
+
+    # Step 2: Build the Data Sender
+    - name: "gcr.io/cloud-builders/docker"
+      args:
+          [
+              "build",
+              "-t",
+              "gcr.io/solarcaroncloud/data-sender:latest",
+              "./Data-Sender",
+          ]
+
+    # Step 3: Build the Frontend
+    - name: "gcr.io/cloud-builders/docker"
+      args:
+          [
+              "build",
+              "-t",
+              "gcr.io/solarcaroncloud/frontend:latest",
+              "./Frontend",
+          ]
+
+images:
+    - "gcr.io/solarcaroncloud/backend:latest"
+    - "gcr.io/solarcaroncloud/data-sender:latest"
+    - "gcr.io/solarcaroncloud/frontend:latest"

@@ -1,0 +1,42 @@
+# sender-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: data-sender-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: data-sender
+    template:
+        metadata:
+            labels:
+                app: data-sender
+        spec:
+            containers:
+                - name: data-sender
+                  image: gcr.io/solarcaroncloud/data-sender:latest
+                  env:
+                      - name: GOOGLE_APPLICATION_CREDENTIALS
+                        value: "/var/secrets/google/key.json"
+                  volumeMounts:
+                      - name: google-cloud-credentials
+                        mountPath: /var/secrets/google
+                        readOnly: true
+            volumes:
+                - name: google-cloud-credentials
+                  secret:
+                      secretName: google-cloud-credentials
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: data-sender-service
+spec:
+    type: LoadBalancer
+    loadBalancerIP: 35.225.167.87
+    ports:
+        - port: 5000
+    selector:
+        app: data-sender

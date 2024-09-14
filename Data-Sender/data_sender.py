@@ -2,6 +2,14 @@ import random
 import time
 
 import requests
+from google.cloud import pubsub_v1
+
+# Configura il publisher di Pub/Sub
+project_id = "solarcaroncloud"
+topic_id = "canbus-topic"
+
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path(project_id, topic_id)
 
 # Lista dei valori possibili per X
 x_values = [
@@ -67,24 +75,18 @@ y_values = [
     "F",
 ]
 
-# Indirizzo del backend locale
-backend_url = "http://localhost:5000/canbus"
-
 while True:
     # Genera valori casuali per X e Y
     x = random.choice(x_values)
     y_hex = "".join([random.choice(y_values) for _ in range(16)])
 
     # Formatta il pacchetto simulato in formato CANbus
-    packet = "{}#{}".format(x, y_hex)
-    print("Inviando pacchetto: {}".format(packet))
+    packet = f"{x}#{y_hex}"
+    print(f"Inviando pacchetto: {packet}")
 
-    # Invia il pacchetto al backend tramite una richiesta POST
-    try:
-        response = requests.post(backend_url, json={"packet": packet})
-        print("Risposta dal server: {}".format(response.status_code))
-    except Exception as e:
-        print("Errore durante l'invio del pacchetto: {}".format(e))
+    # Pubblica il pacchetto su Pub/Sub
+    future = publisher.publish(topic_path, packet.encode("utf-8"))
+    print(f"Pacchetto pubblicato: {future.result()}")
 
     # Attendere 200 ms prima di inviare il prossimo pacchetto
     time.sleep(0.2)
