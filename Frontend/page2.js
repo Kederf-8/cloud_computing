@@ -1,5 +1,5 @@
 async function fetchEngineData() {
-  const url = "http://localhost:5000/engines";
+  const url = "http://35.226.184.53:5000/engines";
 
   try {
     const response = await fetch(url);

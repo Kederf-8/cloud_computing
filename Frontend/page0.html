@@ -1,80 +1,77 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Futuro Solare</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-  </head>
 
-  <body>
-    <div class="container">
-      <header>
-        <img src="img/iconaFS.png" />
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <title>Solar Car</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
 
-      <div class="sidebar">
-        <div class="menu">
-          <a href="page0.html" class="activeImage"
-            ><img src="img/icon1.png" alt="Icona 1"
-          /></a>
-          <a href="page1.html"><img src="img/icon2.png" alt="Icona 2" /></a>
-          <a href="page2.html"><img src="img/icon3.png" alt="Icona 3" /></a>
-          <a href="page3.html"><img src="img/icon4.png" alt="Icona 4" /></a>
-          <img src="img/iconaLT.png" />
-        </div>
-      </div>
+<body>
+  <div class="container">
 
-      <div class="content">
-        <table class="wide-table">
-          <tr>
-            <th class="tableTitle" colspan="5">BATTERY 0</th>
-          </tr>
-          <tr class="long_line">
-            <td colspan="5"></td>
-          </tr>
-          <tr>
-            <td class="cellLabel">LOWEST TEMP</td>
-            <td class="cellLabel">HIGHEST TEMP</td>
-            <td class="cellLabel">CELLS IN WARNING</td>
-            <td class="cellLabel">CELLS IN CRITICAL</td>
-            <td class="cellLabel">CELLS IN ERROR</td>
-            <td class="cellLabel">TEMP AVERAGE</td>
-          </tr>
-          <tr>
-            <td class="cellItem" id="LT1">0</td>
-            <td class="cellItem" id="HT1">0</td>
-            <td class="cellItem-problems" id="CIW1">0</td>
-            <td class="cellItem-problems" id="CIC1">0</td>
-            <td class="cellItem-problems" id="CIE1">0</td>
-            <td class="cellItem" id="TA1">0</td>
-          </tr>
-        </table>
-        <table class="wide-table">
-          <tr>
-            <th class="tableTitle" colspan="5">BATTERY 1</th>
-          </tr>
-          <tr class="long_line">
-            <td colspan="5"></td>
-          </tr>
-          <tr>
-            <td class="cellLabel">LOWEST TEMP</td>
-            <td class="cellLabel">HIGHEST TEMP</td>
-            <td class="cellLabel">CELLS IN WARNING</td>
-            <td class="cellLabel">CELLS IN CRITICAL</td>
-            <td class="cellLabel">CELLS IN ERROR</td>
-            <td class="cellLabel">TEMP AVERAGE</td>
-          </tr>
-          <tr>
-            <td class="cellItem" id="LT2">0</td>
-            <td class="cellItem" id="HT2">0</td>
-            <td class="cellItem-problems" id="CIW2">0</td>
-            <td class="cellItem-problems" id="CIC2">0</td>
-            <td class="cellItem-problems" id="CIE2">0</td>
-            <td class="cellItem" id="TA2">0</td>
-          </tr>
-        </table>
+    <div class="sidebar">
+      <div class="menu">
+        <a href="page0.html" class="activeImage"><img src="img/icon1.png" alt="Icona 1" /></a>
+        <a href="page1.html"><img src="img/icon2.png" alt="Icona 2" /></a>
+        <a href="page2.html"><img src="img/icon3.png" alt="Icona 3" /></a>
+        <a href="page3.html"><img src="img/icon4.png" alt="Icona 4" /></a>
+
       </div>
     </div>
-    <script type="text/javascript" src="page0.js"></script>
-  </body>
+
+    <div class="content">
+      <table class="wide-table">
+        <tr>
+          <th class="tableTitle" colspan="5">BATTERY 0</th>
+        </tr>
+        <tr class="long_line">
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="cellLabel">LOWEST TEMP</td>
+          <td class="cellLabel">HIGHEST TEMP</td>
+          <td class="cellLabel">CELLS IN WARNING</td>
+          <td class="cellLabel">CELLS IN CRITICAL</td>
+          <td class="cellLabel">CELLS IN ERROR</td>
+          <td class="cellLabel">TEMP AVERAGE</td>
+        </tr>
+        <tr>
+          <td class="cellItem" id="LT1">0</td>
+          <td class="cellItem" id="HT1">0</td>
+          <td class="cellItem-problems" id="CIW1">0</td>
+          <td class="cellItem-problems" id="CIC1">0</td>
+          <td class="cellItem-problems" id="CIE1">0</td>
+          <td class="cellItem" id="TA1">0</td>
+        </tr>
+      </table>
+      <table class="wide-table">
+        <tr>
+          <th class="tableTitle" colspan="5">BATTERY 1</th>
+        </tr>
+        <tr class="long_line">
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="cellLabel">LOWEST TEMP</td>
+          <td class="cellLabel">HIGHEST TEMP</td>
+          <td class="cellLabel">CELLS IN WARNING</td>
+          <td class="cellLabel">CELLS IN CRITICAL</td>
+          <td class="cellLabel">CELLS IN ERROR</td>
+          <td class="cellLabel">TEMP AVERAGE</td>
+        </tr>
+        <tr>
+          <td class="cellItem" id="LT2">0</td>
+          <td class="cellItem" id="HT2">0</td>
+          <td class="cellItem-problems" id="CIW2">0</td>
+          <td class="cellItem-problems" id="CIC2">0</td>
+          <td class="cellItem-problems" id="CIE2">0</td>
+          <td class="cellItem" id="TA2">0</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script type="text/javascript" src="page0.js"></script>
+</body>
+
 </html>

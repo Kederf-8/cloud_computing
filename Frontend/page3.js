@@ -1,5 +1,5 @@
 async function fetchMpptData() {
-  const url = "http://localhost:5000/mppts";
+  const url = "http://35.226.184.53:5000/mppts";
 
   try {
     const response = await fetch(url);

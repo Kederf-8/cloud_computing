@@ -26,7 +26,7 @@ from voltage_handler import update_battery_voltages
 
 # Configura Flask e CORS
 app = Flask(__name__)
-CORS(app, origins="http://localhost:8000")
+CORS(app)
 
 # Configura il logging
 now = datetime.datetime.now()

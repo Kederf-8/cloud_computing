@@ -1,5 +1,5 @@
 async function fetchBatteryData() {
-  const url = "http://localhost:5000/voltages";
+  const url = "http://35.226.184.53:5000/voltages";
 
   try {
     const response = await fetch(url);
