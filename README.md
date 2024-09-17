@@ -99,6 +99,31 @@ The `end.sh` script will:
 1. Delete the Kubernetes deployments for the backend, frontend, and data sender.
 2. Delete the GKE cluster.
 
+## Cloud Function: Writing Messages to Google Cloud Storage
+
+This project includes a Cloud Function that listens to a Pub/Sub topic and writes the messages to a Google Cloud Storage bucket. The messages are in the format `153#90B4B8CC1F9B35BA`, which consists of a 3-character hexadecimal ID followed by a `#` and 16 hexadecimal characters representing 4 bytes.
+
+### How the Cloud Function Works
+
+- The function is triggered by messages from a Pub/Sub topic.
+- It decodes the message from the `application/octet-stream` format.
+- The message is then saved to a Google Cloud Storage bucket, under a specific subdirectory (`messages/`), with each file named based on the unique event ID of the message.
+
+### Deploying the Cloud Function
+
+To deploy the Cloud Function, use the following `gcloud` command:
+
+```bash
+gcloud functions deploy write_to_gcs \
+    --runtime python311 \
+    --trigger-topic <YOUR-TOPIC> \
+    --entry-point write_to_gcs \
+    --region <YOUR-REGION> \
+    --source .
+```
+
+where `write_to_gcs` is the name of the function.
+
 ## Running Locally
 
 If you want to run the project locally, follow these steps:

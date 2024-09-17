@@ -1,0 +1,2 @@
+# requirements della cloud function che scrive sul bucket
+google-cloud-storage==2.18.2
