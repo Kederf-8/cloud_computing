@@ -7,9 +7,11 @@ from google.cloud import pubsub_v1
 # Configura il publisher di Pub/Sub
 project_id = "solarcaroncloud"
 topic_id = "canbus-topic"
+gcs_topic_id = "canbus-topic-gcs"
 
 publisher = pubsub_v1.PublisherClient()
 topic_path = publisher.topic_path(project_id, topic_id)
+gcs_topic_path = publisher.topic_path(project_id, gcs_topic_id)
 
 # Lista dei valori possibili per X
 x_values = [
@@ -86,6 +88,10 @@ while True:
 
     # Pubblica il pacchetto su Pub/Sub
     future = publisher.publish(topic_path, packet.encode("utf-8"))
+    
+    # Pubblica il messaggio sul secondo topic (per GCS)
+    publisher.publish(gcs_topic_path, packet.encode("utf-8"))
+    
     print(f"Pacchetto pubblicato: {future.result()}")
 
     # Attendere 200 ms prima di inviare il prossimo pacchetto
