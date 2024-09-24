@@ -4,63 +4,60 @@ on:
     push:
         branches:
             - main
-    pull_request:
-        branches:
-            - main
 
 jobs:
-    build:
+    build-and-deploy:
         runs-on: ubuntu-latest
 
         steps:
-            # Checkout the repository
             - name: Checkout code
               uses: actions/checkout@v2
 
-            # Set up Google Cloud SDK
             - name: Set up Google Cloud SDK
               uses: google-github-actions/setup-gcloud@v2
               with:
-                  project_id: ${{ secrets.GCP_PROJECT_ID }}
+                  project_id: solarcaroncloud
                   service_account_key: ${{ secrets.GCP_SA_KEY }}
                   export_default_credentials: true
                   install_components: "beta"
 
-            # Authenticate Docker to Google Container Registry (GCR)
-            - name: Authenticate Docker to gcr.io
+            # Authenticate Docker to Google Container Registry
+            - name: Authenticate Docker to Google Cloud Registry
               run: |
-                  echo "${{ secrets.GCP_SA_KEY }}" | docker login -u _json_key --password-stdin https://gcr.io
+                  gcloud auth configure-docker
 
-            # Build and push Docker images for backend, frontend, and sender
-            - name: Build and push Backend image
+            - name: Check GCP authentication
               run: |
-                  docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend ./Backend
-                  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
+                  gcloud auth list
+                  gcloud config list project
 
-            - name: Build and push Frontend image
+            - name: Build Docker images
               run: |
-                  docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend ./Frontend
-                  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend
+                  docker build -t gcr.io/solarcaroncloud/backend ./Backend
+                  docker build -t gcr.io/solarcaroncloud/frontend ./Frontend
+                  docker build -t gcr.io/solarcaroncloud/sender ./Data-Sender
 
-            - name: Build and push Data-Sender image
+            - name: Push Docker images to Google Container Registry
               run: |
-                  docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/data-sender ./Data-Sender
-                  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/data-sender
+                  docker push gcr.io/solarcaroncloud/backend
+                  docker push gcr.io/solarcaroncloud/frontend
+                  docker push gcr.io/solarcaroncloud/sender
 
-            # Get GKE credentials to interact with Kubernetes cluster
+            - name: Set up kubectl
+              uses: azure/setup-kubectl@v1
+              with:
+                  version: "latest"
+
             - name: Get GKE credentials
               run: |
-                  gcloud container clusters get-credentials sensor-cluster --region us-central1-a
+                  gcloud container clusters get-credentials sensor-cluster --region us-central1-a --no-enable-gke-gcloud-auth-plugin
 
-            # Deploy to Kubernetes
-            - name: Deploy Backend to Kubernetes
+            - name: Deploy to Kubernetes
               run: |
                   kubectl apply -f backend-deployment.yaml
-
-            - name: Deploy Frontend to Kubernetes
-              run: |
                   kubectl apply -f frontend-deployment.yaml
-
-            - name: Deploy Data-Sender to Kubernetes
-              run: |
                   kubectl apply -f sender-deployment.yaml
+
+            - name: Clean up
+              run: |
+                  rm ${HOME}/gcp-key.json
