@@ -4,62 +4,63 @@ on:
     push:
         branches:
             - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-    build-and-deploy:
+    build:
         runs-on: ubuntu-latest
 
         steps:
+            # Checkout the repository
             - name: Checkout code
               uses: actions/checkout@v2
 
+            # Set up Google Cloud SDK
             - name: Set up Google Cloud SDK
-              uses: google-github-actions/setup-gcloud@v1
+              uses: google-github-actions/setup-gcloud@v2
               with:
-                  project_id: solarcaroncloud
-                  version: "latest" # Aggiungi la versione se necessario
+                  project_id: ${{ secrets.GCP_PROJECT_ID }}
+                  service_account_key: ${{ secrets.GCP_SA_KEY }}
+                  export_default_credentials: true
+                  install_components: "beta"
 
-            - name: Authenticate to Google Cloud
-              uses: google-github-actions/auth@v0.4.0 # Usa l'ultima versione stabile
-              with:
-                  credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-            - name: Authenticate Docker to Google Cloud Registry
+            # Authenticate Docker to Google Container Registry (GCR)
+            - name: Authenticate Docker to gcr.io
               run: |
-                  gcloud auth configure-docker
+                  echo "${{ secrets.GCP_SA_KEY }}" | docker login -u _json_key --password-stdin https://gcr.io
 
-            - name: Check GCP authentication
+            # Build and push Docker images for backend, frontend, and sender
+            - name: Build and push Backend image
               run: |
-                  gcloud auth list
-                  gcloud config list project
+                  docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend ./Backend
+                  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
 
-            - name: Build Docker images
+            - name: Build and push Frontend image
               run: |
-                  docker build -t gcr.io/solarcaroncloud/backend ./Backend
-                  docker build -t gcr.io/solarcaroncloud/frontend ./Frontend
-                  docker build -t gcr.io/solarcaroncloud/sender ./Data-Sender
+                  docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend ./Frontend
+                  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend
 
-            - name: Push Docker images to Google Container Registry
+            - name: Build and push Data-Sender image
               run: |
-                  docker push gcr.io/solarcaroncloud/backend
-                  docker push gcr.io/solarcaroncloud/frontend
-                  docker push gcr.io/solarcaroncloud/sender
+                  docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/data-sender ./Data-Sender
+                  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/data-sender
 
-            - name: Set up kubectl
-              uses: azure/setup-kubectl@v1
-              with:
-                  version: "latest"
-
+            # Get GKE credentials to interact with Kubernetes cluster
             - name: Get GKE credentials
               run: |
-                  gcloud container clusters get-credentials sensor-cluster --region us-central1-a --no-enable-gke-gcloud-auth-plugin
+                  gcloud container clusters get-credentials sensor-cluster --region us-central1-a
 
-            - name: Deploy to Kubernetes
+            # Deploy to Kubernetes
+            - name: Deploy Backend to Kubernetes
               run: |
                   kubectl apply -f backend-deployment.yaml
-                  kubectl apply -f frontend-deployment.yaml
-                  kubectl apply -f sender-deployment.yaml
 
-            - name: Clean up
+            - name: Deploy Frontend to Kubernetes
               run: |
-                  rm ${HOME}/gcp-key.json
+                  kubectl apply -f frontend-deployment.yaml
+
+            - name: Deploy Data-Sender to Kubernetes
+              run: |
+                  kubectl apply -f sender-deployment.yaml
