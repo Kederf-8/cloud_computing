@@ -26,30 +26,24 @@ jobs:
                   sudo service docker start
                   sudo docker info
 
-            # Authenticate Docker to Google Container Registry
             - name: Authenticate Docker to Google Cloud Registry
               run: |
                   gcloud auth configure-docker gcr.io --quiet
 
-            - name: Check GCP authentication
-              run: |
-                  gcloud auth list
-                  gcloud config list project
-
             - name: Build and push Backend image
               run: |
-                  docker build -f Backend/Dockerfile -t gcr.io/solarcaroncloud/backend:latest .
-                  docker push gcr.io/solarcaroncloud/backend:latest
+                  sudo docker build -f Backend/Dockerfile -t gcr.io/solarcaroncloud/backend:latest .
+                  sudo docker push gcr.io/solarcaroncloud/backend:latest
 
             - name: Build and push Frontend image
               run: |
-                  docker build -f Frontend/Dockerfile -t gcr.io/solarcaroncloud/frontend:latest .
-                  docker push gcr.io/solarcaroncloud/frontend:latest
+                  sudo docker build -f Frontend/Dockerfile -t gcr.io/solarcaroncloud/frontend:latest .
+                  sudo docker push gcr.io/solarcaroncloud/frontend:latest
 
             - name: Build and push Data-Sender image
               run: |
-                  docker build -f Data-Sender/Dockerfile -t gcr.io/solarcaroncloud/data-sender:latest .
-                  docker push gcr.io/solarcaroncloud/data-sender:latest
+                  sudo docker build -f Data-Sender/Dockerfile -t gcr.io/solarcaroncloud/data-sender:latest .
+                  sudo docker push gcr.io/solarcaroncloud/data-sender:latest
 
             - name: Set up kubectl
               uses: azure/setup-kubectl@v1
