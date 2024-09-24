@@ -35,9 +35,9 @@ jobs:
 
             - name: Build Docker images
               run: |
-                  docker build -t gcr.io/solarcaroncloud/backend ./backend
-                  docker build -t gcr.io/solarcaroncloud/frontend ./frontend
-                  docker build -t gcr.io/solarcaroncloud/sender ./sender
+                  docker build -t gcr.io/solarcaroncloud/backend ./Backend
+                  docker build -t gcr.io/solarcaroncloud/frontend ./Frontend
+                  docker build -t gcr.io/solarcaroncloud/sender ./Data-Sender
 
             - name: Push Docker images to Google Container Registry
               run: |
