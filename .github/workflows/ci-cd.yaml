@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for SolarCarOnCloud
+name: CI/CD Pipeline
 
 on:
     push:
@@ -6,11 +6,11 @@ on:
             - main
 
 jobs:
-    build:
+    build-and-deploy:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout repository
+            - name: Checkout code
               uses: actions/checkout@v2
 
             - name: Set up Google Cloud SDK
@@ -23,49 +23,41 @@ jobs:
             - name: Authenticate Docker to Google Cloud Registry
               run: |
                   echo "${{ secrets.GCP_SA_KEY }}" > ${HOME}/gcp-key.json
-                  cat ${HOME}/gcp-key.json
                   gcloud auth activate-service-account --key-file=${HOME}/gcp-key.json
                   gcloud auth configure-docker
 
-            - name: Build and push Docker image for backend
+            - name: Check GCP authentication
               run: |
-                  docker build -t gcr.io/solarcaroncloud/backend .
+                  gcloud auth list
+                  gcloud config list project
+
+            - name: Build Docker images
+              run: |
+                  docker build -t gcr.io/solarcaroncloud/backend ./backend
+                  docker build -t gcr.io/solarcaroncloud/frontend ./frontend
+                  docker build -t gcr.io/solarcaroncloud/sender ./sender
+
+            - name: Push Docker images to Google Container Registry
+              run: |
                   docker push gcr.io/solarcaroncloud/backend
-
-            - name: Build and push Docker image for frontend
-              run: |
-                  docker build -t gcr.io/solarcaroncloud/frontend .
                   docker push gcr.io/solarcaroncloud/frontend
-
-            - name: Build and push Docker image for sender
-              run: |
-                  docker build -t gcr.io/solarcaroncloud/sender .
                   docker push gcr.io/solarcaroncloud/sender
 
-    deploy:
-        needs: build
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Set up Google Cloud SDK
-              uses: google-github-actions/setup-gcloud@v1
+            - name: Set up kubectl
+              uses: azure/setup-kubectl@v1
               with:
-                  project_id: solarcaroncloud
-                  service_account_key: ${{ secrets.GCP_SA_KEY }}
-                  export_default_credentials: true
+                  version: "latest"
 
-            - name: Configure kubectl
+            - name: Get GKE credentials
               run: |
-                  gcloud container clusters get-credentials sensor-cluster --zone us-central1-a --project solarcaroncloud
+                  gcloud container clusters get-credentials sensor-cluster --region us-central1-a
 
-            - name: Deploy backend to GKE
+            - name: Deploy to Kubernetes
               run: |
                   kubectl apply -f backend-deployment.yaml
-
-            - name: Deploy frontend to GKE
-              run: |
                   kubectl apply -f frontend-deployment.yaml
-
-            - name: Deploy sender to GKE
-              run: |
                   kubectl apply -f sender-deployment.yaml
+
+            - name: Clean up
+              run: |
+                  rm ${HOME}/gcp-key.json
