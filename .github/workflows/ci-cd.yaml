@@ -30,19 +30,16 @@ jobs:
               run: |
                   gcloud auth configure-docker gcr.io --quiet
 
-            - name: Build and push Backend image
+            - name: Build images
               run: |
                   sudo docker build -f Backend/Dockerfile -t gcr.io/solarcaroncloud/backend:latest .
-                  sudo docker push gcr.io/solarcaroncloud/backend:latest
-
-            - name: Build and push Frontend image
-              run: |
                   sudo docker build -f Frontend/Dockerfile -t gcr.io/solarcaroncloud/frontend:latest .
-                  sudo docker push gcr.io/solarcaroncloud/frontend:latest
-
-            - name: Build and push Data-Sender image
-              run: |
                   sudo docker build -f Data-Sender/Dockerfile -t gcr.io/solarcaroncloud/data-sender:latest .
+
+            - name: Push images
+              run: |
+                  sudo docker push gcr.io/solarcaroncloud/backend:latest
+                  sudo docker push gcr.io/solarcaroncloud/frontend:latest
                   sudo docker push gcr.io/solarcaroncloud/data-sender:latest
 
             - name: Set up kubectl
