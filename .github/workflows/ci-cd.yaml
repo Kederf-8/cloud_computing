@@ -20,7 +20,7 @@ jobs:
                   version: "latest" # Aggiungi la versione se necessario
 
             - name: Authenticate to Google Cloud
-              uses: google-github-actions/auth@v0.5.1 # Usa l'azione di autenticazione
+              uses: google-github-actions/auth@v0.4.0 # Usa l'ultima versione stabile
               with:
                   credentials_json: ${{ secrets.GCP_SA_KEY }}
 
