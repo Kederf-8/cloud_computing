@@ -24,7 +24,7 @@ jobs:
             # Authenticate Docker to Google Container Registry
             - name: Authenticate Docker to Google Cloud Registry
               run: |
-                  echo ${GCP_SA_KEY} | docker login -u _json_key --password-stdin https://gcr.io
+                  gcloud auth configure-docker gcr.io --quiet
 
             - name: Check GCP authentication
               run: |
