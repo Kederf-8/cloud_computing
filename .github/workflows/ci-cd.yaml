@@ -21,6 +21,11 @@ jobs:
                   export_default_credentials: true
                   install_components: "beta"
 
+            - name: Ensure Docker is running
+              run: |
+                  sudo service docker start
+                  sudo docker info
+
             # Authenticate Docker to Google Container Registry
             - name: Authenticate Docker to Google Cloud Registry
               run: |
