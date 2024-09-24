@@ -24,7 +24,7 @@ jobs:
             # Authenticate Docker to Google Container Registry
             - name: Authenticate Docker to Google Cloud Registry
               run: |
-                  gcloud auth configure-docker
+                  gcloud auth configure-docker gcr.io
 
             - name: Check GCP authentication
               run: |
