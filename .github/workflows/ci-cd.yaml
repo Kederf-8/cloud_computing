@@ -24,7 +24,7 @@ jobs:
             # Authenticate Docker to Google Container Registry
             - name: Authenticate Docker to Google Cloud Registry
               run: |
-                  gcloud auth configure-docker gcr.io --quiet
+                  echo ${GCP_SA_KEY} | docker login -u _json_key --password-stdin https://gcr.io
 
             - name: Check GCP authentication
               run: |
@@ -33,20 +33,17 @@ jobs:
 
             - name: Build and push Backend image
               run: |
-                  cd Backend
-                  docker build -f Dockerfile -t gcr.io/solarcaroncloud/backend:latest .
+                  docker build -f Backend/Dockerfile -t gcr.io/solarcaroncloud/backend:latest .
                   docker push gcr.io/solarcaroncloud/backend:latest
 
             - name: Build and push Frontend image
               run: |
-                  cd Frontend
-                  docker build -f Dockerfile -t gcr.io/solarcaroncloud/frontend:latest .
+                  docker build -f Frontend/Dockerfile -t gcr.io/solarcaroncloud/frontend:latest .
                   docker push gcr.io/solarcaroncloud/frontend:latest
 
             - name: Build and push Data-Sender image
               run: |
-                  cd Data-Sender
-                  docker build -f Dockerfile -t gcr.io/solarcaroncloud/data-sender:latest .
+                  docker build -f Data-Sender/Dockerfile -t gcr.io/solarcaroncloud/data-sender:latest .
                   docker push gcr.io/solarcaroncloud/data-sender:latest
 
             - name: Set up kubectl
