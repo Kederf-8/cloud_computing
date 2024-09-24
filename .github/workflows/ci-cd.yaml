@@ -1,0 +1,68 @@
+name: CI/CD Pipeline for SolarCarOnCloud
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up Google Cloud SDK
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  project_id: solarcaroncloud
+                  service_account_key: ${{ secrets.GCP_SA_KEY }}
+                  export_default_credentials: true
+
+            - name: Authenticate Docker to Google Cloud Registry
+              run: |
+                  echo "${{ secrets.GCP_SA_KEY }}" | docker login -u _json_key --password-stdin https://gcr.io
+
+            - name: Build and push Docker image for backend
+              run: |
+                  docker build -t gcr.io/solarcaroncloud/backend .
+                  docker push gcr.io/solarcaroncloud/backend
+
+            - name: Build and push Docker image for frontend
+              run: |
+                  docker build -t gcr.io/solarcaroncloud/frontend .
+                  docker push gcr.io/solarcaroncloud/frontend
+
+            - name: Build and push Docker image for sender
+              run: |
+                  docker build -t gcr.io/solarcaroncloud/sender .
+                  docker push gcr.io/solarcaroncloud/sender
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Set up Google Cloud SDK
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  project_id: solarcaroncloud
+                  service_account_key: ${{ secrets.GCP_SA_KEY }}
+                  export_default_credentials: true
+
+            - name: Configure kubectl
+              run: |
+                  gcloud container clusters get-credentials sensor-cluster --zone us-central1-a --project solarcaroncloud
+
+            - name: Deploy backend to GKE
+              run: |
+                  kubectl apply -f backend-deployment.yaml
+
+            - name: Deploy frontend to GKE
+              run: |
+                  kubectl apply -f frontend-deployment.yaml
+
+            - name: Deploy sender to GKE
+              run: |
+                  kubectl apply -f sender-deployment.yaml
