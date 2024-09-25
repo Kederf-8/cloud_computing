@@ -236,7 +236,7 @@ engine_data = {
         "rpm": 0,
     },
     "speed": 0,
-    "log_error": "Over Temperature Engine Left 12.31;Internal volts fault Engine Left 12.29;Throttle error at power-up Engine Right 12.15; Over Temperature engine 0 12.13;Warning cell in engine 1 12.12;Warning cell in engine 1 12.11;Warning cell in engine 1 12.09; Errore batteria destra cella 2 12.19; Errore batteria sinistra cella 3 12.20;",
+    "log_error": "Questo log dimostra che la ci/cd funziona;Over Temperature Engine Left 12.31;Internal volts fault Engine Left 12.29;Throttle error at power-up Engine Right 12.15; Over Temperature engine 0 12.13;Warning cell in engine 1 12.12;Warning cell in engine 1 12.11;Warning cell in engine 1 12.09; Errore batteria destra cella 2 12.19; Errore batteria sinistra cella 3 12.20;",
 }
 """ Struttura della response della terza pagina. Usata come struct per conservare i dati"""
 
