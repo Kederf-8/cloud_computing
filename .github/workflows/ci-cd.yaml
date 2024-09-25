@@ -28,7 +28,12 @@ jobs:
 
             - name: Authenticate Docker to Google Cloud Registry
               run: |
-                  gcloud auth configure-docker gcr.io --quiet
+                  gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
+
+            - name: Check Docker login
+              run: |
+                  docker info
+                  docker login gcr.io
 
             - name: Build images
               run: |
