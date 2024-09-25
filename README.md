@@ -2,6 +2,8 @@
 
 This project simulates the data collection and visualization for a solar-powered car using a cloud-based infrastructure. It includes a backend for processing CANbus-like messages, a frontend for data visualization, and a data sender that pushes random CANbus data to Google Cloud Pub/Sub.
 
+![alt text](HighLayerInfrastructurePipeline.jpg)
+
 ## Project Overview
 
 - **Backend**: A Flask application that listens for CANbus data from Pub/Sub and provides API endpoints for the frontend.
