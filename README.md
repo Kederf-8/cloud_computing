@@ -56,18 +56,15 @@ Alternatively, you can manually run the following commands:
 
 ```bash
 # Build and push backend
-cd Backend
-docker build -f Dockerfile.backend -t gcr.io/solarcaroncloud/backend:latest .
+docker build -f Backend/Dockerfile -t gcr.io/solarcaroncloud/backend:latest .
 docker push gcr.io/solarcaroncloud/backend:latest
 
 # Build and push frontend
-cd ../Frontend
-docker build -f Dockerfile.frontend -t gcr.io/solarcaroncloud/frontend:latest .
+docker build -f Frontend/Dockerfile -t gcr.io/solarcaroncloud/frontend:latest .
 docker push gcr.io/solarcaroncloud/frontend:latest
 
 # Build and push data sender
-cd ../Data-Sender
-docker build -f Dockerfile.data-sender -t gcr.io/solarcaroncloud/data-sender:latest .
+docker build -f Data-Sender/Dockerfile -t gcr.io/solarcaroncloud/data-sender:latest .
 docker push gcr.io/solarcaroncloud/data-sender:latest
 ```
 
@@ -76,8 +73,6 @@ docker push gcr.io/solarcaroncloud/data-sender:latest
 To deploy the backend, frontend, and data sender services on Kubernetes, you can also use the `start.sh` script or manually apply the deployment files:
 
 ```bash
-cd ..
-
 # Backend deployment
 kubectl apply -f backend-deployment.yaml
 
