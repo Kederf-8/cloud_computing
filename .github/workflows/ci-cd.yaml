@@ -53,6 +53,11 @@ jobs:
             - name: Get GKE credentials
               run: |
                   gcloud container clusters get-credentials sensor-cluster --region us-central1-a
+
+            - name: Install gke-gcloud-auth-plugin
+              run: |
+                  sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+
             - name: Deploy to Kubernetes
               run: |
                   kubectl apply -f backend-deployment.yaml
