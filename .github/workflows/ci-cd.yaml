@@ -63,7 +63,3 @@ jobs:
                   kubectl apply -f backend-deployment.yaml
                   kubectl apply -f frontend-deployment.yaml
                   kubectl apply -f sender-deployment.yaml
-
-            - name: Clean up
-              run: |
-                  rm ${HOME}/gcp-key.json
