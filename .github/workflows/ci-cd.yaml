@@ -52,7 +52,7 @@ jobs:
 
             - name: Get GKE credentials
               run: |
-                  gcloud container clusters get-credentials sensor-cluster --region us-central1-a --no-enable-gke-gcloud-auth-plugin
+                  gcloud container clusters get-credentials sensor-cluster --region us
 
             - name: Deploy to Kubernetes
               run: |
