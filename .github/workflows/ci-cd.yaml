@@ -35,15 +35,15 @@ jobs:
 
             - name: Build Docker images
               run: |
-                  docker build -t gcr.io/solarcaroncloud/backend ./Backend
-                  docker build -t gcr.io/solarcaroncloud/frontend ./Frontend
-                  docker build -t gcr.io/solarcaroncloud/sender ./Data-Sender
+                  docker build -t gcr.io/solarcaroncloud/backend:latest ./Backend
+                  docker build -t gcr.io/solarcaroncloud/frontend:latest ./Frontend
+                  docker build -t gcr.io/solarcaroncloud/sender:latest ./Data-Sender
 
             - name: Push Docker images to Google Container Registry
               run: |
-                  docker push gcr.io/solarcaroncloud/backend
-                  docker push gcr.io/solarcaroncloud/frontend
-                  docker push gcr.io/solarcaroncloud/sender
+                  docker push gcr.io/solarcaroncloud/backend:latest
+                  docker push gcr.io/solarcaroncloud/frontend:latest
+                  docker push gcr.io/solarcaroncloud/sender:latest
 
             - name: Set up kubectl
               uses: azure/setup-kubectl@v4
